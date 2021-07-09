@@ -1,0 +1,48 @@
+void quicksort(int *nums, int left, int right)
+{
+    if(left<right)
+    {
+        int i=left, j=right;
+        int mid = left+ (right-left)/2;
+        if(nums[mid]>nums[right])
+        {
+            int tmp = nums[right];
+            nums[right] = nums[mid];
+            nums[mid] = tmp;
+        }
+        if(nums[left]>nums[right])
+        {
+            int tmp = nums[right];
+            nums[right] = nums[left];
+            nums[left] = tmp;
+        }
+        if(nums[mid]>nums[left])
+        {
+            int tmp = nums[mid];
+            nums[mid] = nums[left];
+            nums[left] = tmp;
+        }
+        int key = nums[left];
+        while(i<j)
+        {
+            while(i<j && nums[j]>=key)
+            {
+                j--;
+            }
+            nums[i] = nums[j];
+            while(i<j && nums[i]<key)
+            {
+                i++;
+            }
+            nums[j] = nums[i];
+        }
+        nums[i] = key;
+        quicksort(nums, left, i-1);
+        quicksort(nums, i+1, right);
+    }
+}
+int* sortArray(int* nums, int numsSize, int* returnSize){
+    quicksort(nums, 0, numsSize-1);
+    *returnSize = numsSize;
+    return nums;
+}
