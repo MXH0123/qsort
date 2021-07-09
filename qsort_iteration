@@ -1,0 +1,84 @@
+int partition(int *nums, int left, int right)
+{
+        int mid = left+ (right-left)/2;
+        if(nums[mid]>nums[right])
+        {
+            int tmp = nums[right];
+            nums[right] = nums[mid];
+            nums[mid] = tmp;
+        }
+        if(nums[left]>nums[right])
+        {
+            int tmp = nums[right];
+            nums[right] = nums[left];
+            nums[left] = tmp;
+        }
+        if(nums[mid]>nums[left])
+        {
+            int tmp = nums[mid];
+            nums[mid] = nums[left];
+            nums[left] = tmp;
+        }
+        int key = nums[left];
+        while(left<right)
+        {
+            while(left<right && nums[right]>=key)
+            {
+                right--;
+            }
+            nums[left] = nums[right];
+            while(left<right && nums[left]<key)
+            {
+                left++;
+            }
+            nums[right] = nums[left];
+        }
+        nums[left] = key;
+        return left;
+}
+void quicksort(int *nums, int numsSize, int left, int right)
+{
+    int *stk = (int *)malloc(sizeof(int) * numsSize);
+    int top = -1;
+    if(left<right)
+    {
+        int pos = partition(nums, left, right);
+        if(pos-1>left)
+        {
+            stk[++top] = left;
+            stk[++top] = pos-1;
+        }
+        if(pos+1<right)
+        {
+            stk[++top] = pos+1;
+            stk[++top] = right;
+        }
+        while(top>=0)
+        {
+            int r = stk[top];
+            top--;
+            int l = stk[top];
+            top--;
+            if(l<r)
+            {
+                pos = partition(nums, l, r);
+                if(pos-1>l)
+                {
+                    stk[++top] = l;
+                    stk[++top] = pos-1;
+                }
+                if(pos+1<right)
+                {
+                    stk[++top] = pos+1;
+                    stk[++top] = r;
+                }
+            }
+        }
+    }
+}
+
+int* sortArray(int* nums, int numsSize, int* returnSize){
+    quicksort(nums, numsSize, 0, numsSize-1);
+    *returnSize = numsSize;
+    return nums;
+}
